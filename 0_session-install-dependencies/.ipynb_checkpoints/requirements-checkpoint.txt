@@ -1,3 +1,0 @@
-## list pip requirements here
-transformers==4.48.1
-vllm==0.6.3
