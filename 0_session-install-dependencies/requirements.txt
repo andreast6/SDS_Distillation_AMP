@@ -1,4 +1,4 @@
 ## list pip requirements here
 transformers==4.48.1
 vllm==0.6.3
-pynng=='0.8.1'
+pynng==0.8.1
