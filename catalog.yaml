@@ -1,0 +1,17 @@
+name: Knowledge Distillation for Customer Support LLMs using Synthetic Data
+
+entries:
+  - title: 
+    label: SyntehticDataStudioForCustomerSupportUseCase
+    short_description: |
+        The project demonstrates demonstrates how to use Synthetic data studio to distill knowledge from a larger model to a local model for a customer support use case.
+    long_description: |
+        This project addresses the challenge of improving the accuracy and speed of a customer support LLM while adhering to data privacy constraints. By leveraging synthetic data generation and fine-tuning techniques, we demonstrate how to train a smaller, faster LLM (Meta-Llama-3.1-8B-Instruct) for real-time analysis of customer support requests and compare the results to a base model.
+    tags:
+      - Synthetic data
+      - Finetuning
+      - Inference
+      - Distillation
+      - Customer support
+    git_url: 'https://github.com/andreast6/SDS_Distillation_AMP'
+    is_prototype: true
