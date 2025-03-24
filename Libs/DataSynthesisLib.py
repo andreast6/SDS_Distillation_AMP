@@ -49,8 +49,13 @@ def GetInferenceClass():
 
         if self.Config["tokenizer-file-gguf"]!="":
             self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"], gguf_file=self.Config["tokenizer-file-gguf"])
+            if 'chat_template' in self.Config:
+                self.tokenizer.chat_template=self.Config['chat_template']
         else: 
             self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"])
+            if 'chat_template' in self.Config:
+                self.tokenizer.chat_template=self.Config['chat_template']
+
 
       def SetSamplingParams(self, Config):
         from lmformatenforcer.regexparser import RegexParser
@@ -71,10 +76,10 @@ def GetInferenceClass():
                 self.generator = outlines.generate.regex(self.llm,r".*```python.*")#self.Config["grammar"])
 
 
-        if self.Config["tokenizer-file-gguf"]!="":
-            self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"], gguf_file=self.Config["tokenizer-file-gguf"])
-        else: 
-            self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"])
+        #if self.Config["tokenizer-file-gguf"]!="":
+        #    self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"], gguf_file=self.Config["tokenizer-file-gguf"])
+        #else: 
+        #    self.tokenizer = AutoTokenizer.from_pretrained(self.Config["tokenizer-path"])
 
         if  Config["use-grammar"]=="True":
             if  Config["UseOutlines"]=="False":
