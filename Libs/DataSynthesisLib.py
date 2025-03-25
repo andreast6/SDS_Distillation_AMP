@@ -98,13 +98,18 @@ def GetInferenceClass():
 
       def GenerateChatWithSystem(self,System,User):
         self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "system", "content": System},{"role": "user", "content": j}], tokenize=True)) for j in User]
-          
+        #print(self.chat[0])
+        tmp = [self.tokenizer.apply_chat_template([{"role": "system", "content": System},{"role": "user", "content": j}], tokenize=True) for j in User]
+        #print(tmp[0])
+        #print(len(tmp[0]))
+
 #      def GenerateChatWithoutSystem(self,System,User):
 #        self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "user", "content": i+"\n"+j}], tokenize=True)) for i,j in zip(System,User)]
 
       def GenerateChatWithSystemWithAssistant(self,System,User):
+        #print()
         self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "system", "content": System},{"role": "user", "content": j},{"role": "assistant", "content": self.Config["AssistantPrompt"]}], tokenize=True)[:-int(self.Config["AssistantPromptElementsRemoval"])or None]) for j in User]
-
+        
 
       def GenerateChatWithoutSystemWithAssistant(self,System,User):
         self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "user", "content":i},{"role": "assistant", "content":self.Config["AssistantPrompt"]}], tokenize=True)[:-int(self.Config["AssistantPromptElementsRemoval"])or None]) for i in User]
@@ -134,7 +139,7 @@ def GetInferenceClass():
           Out=self.llm.generate(self.chat, self.sampling_params)
         else:
           Out=self.generator(self.chat)
-
+        #print(Out)
         return Out
       #def GenerateVLLMSingleEmbeddings(self,System,User):
       #  self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "system", "content": i},{"role": "user", "content": j}], tokenize=True)) for i,j in zip(System,User)]
