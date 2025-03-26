@@ -15,11 +15,9 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 - This is the starting notebook of the project. In this step, we download all the required models and install the needed libraries.
 
 **Purpose:**  
-- Install required libraries (transformers, vllm)  
 - Download models required for this project  
 
 **Key Components:**  
-- Installs HuggingFace Transformers and vLLM for distributed inference  
 - Initializes two foundational models:  
   - `Meta-Llama-3.1-8B-Instruct` (target for fine-tuning)  
   - `Microsoft Phi-4` (used later as an evaluation judge)  
@@ -31,11 +29,11 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Step 2: Data Preparation  
 **Overview**
-- In this notebook, we use the output data from Synthetic Data Studio (SDS) and process it for finetuning and evaluation. Cloudera customer support separates and processes  customer and Cloudera comments using two different output formats. Thus, we use different SDS generated data for each comment type. In addition, the SDS outputs is a list of topics and each topic contains the relevant prompt, completion, and evaluation. We use the evaluation score to filter low-quality data  and combine the prompt with the expected completion to teach the LLM using finetuning. For LLM finetuning, we combine the customer and Cloudera comments into one LLM for efficiency. We also leave 1000 samples out for processing Cloudera and customer comments. 
+- In this notebook, we use the output data from Synthetic Data Studio (SDS) and process it for finetuning and evaluation. Cloudera's customer support team separates and processes  customer and Cloudera comments using two different output formats. Thus, we use different SDS generated data for each comment type. In addition, the SDS outputs is a list of topics and each topic contains the relevant prompt, completion, and evaluation. We use the evaluation score to filter low-quality data  and combine the prompt with the expected completion to teach the LLM using finetuning. For LLM finetuning, we combine the customer and Cloudera comments into one LLM for efficiency. We also leave 1000 samples out for processing Cloudera and customer comments. 
 
 **Purpose:**  
 - Generate structured training data from raw customer support comments  
-- Split data into training/validation sets  
+- Split data into training/evaluation sets  
 
 **Process:**  
 1. Loads raw data from `ClouderaComments.json` and `CustomerComments.json`  
@@ -44,6 +42,10 @@ This project addresses the challenge of improving the accuracy and speed of a cu
    - **Prompt:** Customer support comment + structured questions  
    - **Completion:** Model answers to the questions (e.g., scores, summaries)  
 4. Splits data into `Train_Clean` (3500 samples) and `Evaluation_Clean` (500 samples for Cloudera comments and 500 samples for customer comments)  
+
+**Variables to Customize** 
+- Filenames for input data (e.g., `filename='Data/ClouderaComments'`).  
+- Data split sizes (e.g., `3500` for training vs `500` for evaluation).  
 
 **Output:**  
 - Cleaned datasets in `AllComments_Clean_Train.json` and evaluation files  
@@ -65,7 +67,16 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 - **Training:**  
   - Dataset from Step 2 formatted into chat templates  
   - Trained for 1 epoch with gradient accumulation  
-  - Saves fine-tuned model to `/tmp/merged_...`  
+  - Saves fine-tuned model to `./tmp/merged_...`  
+
+**Variables to Customize**
+- **LoRA Parameters**
+  - `lora_r`: Rank (default `128`).  
+  - `lora_alpha`: Scaling factor (default `64`).  
+  - `lora_dropout`: Dropout rate (default `0.05`).  
+- `Data_Size`: Number of samples used for training (default `5000`). if the number of samples is more than data samples available, it uses the maximum available.  
+- `FT-num_train_epochs`: Number of training epochs (default `1`).
+
 
 **Output:**  
 - A domain-specific model optimized for customer support tasks  
@@ -74,9 +85,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Step 4: Inference, Evaluation, and Benchmarking 
 **Overview**
-- In this final notebook, we infer the output (completion) for each Cloudera and customer comments separately. Using the generated answers, we parse the output, extract the releveant information and instruct an LLM-as-a-judge to compare the outputs of the two LLMs (score if A or B are best or if it is a tie). Here, we evaluate only on answers that there is no tie between the models and compute the Winrate and the percentage of ties. Also, this step shows example outputs from each LLM.
-
-
+- In this final notebook, we infer the output (completion) for each Cloudera and customer comments separately. Using the generated answers, we parse the output, extract the releveant information and instruct an LLM-as-a-judge to compare the outputs of the two LLMs (score if A or B model is best or if it is a tie). Here, we evaluate only on answers that there is no tie between the models and compute the winrate and the percentage of ties. Also, this step shows example outputs from each LLM.
 
 **Purpose:**  
 - Compare the fine-tuned model against the baseline (Meta-Llama-3.1-8B-Instruct)  
@@ -85,24 +94,37 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 **Process:**  
 1. Generate outputs for both models on evaluation data  
 2. Format outputs into structured comparisons for the judge  
-3. Judge evaluates pairs of answers and selects the better-performing model  
+3. Judge evaluates pairs of answers and selects the better-performing model
+4. Compute the winrate of the Finetuned model compared to baseline for each question and average.
+
+**Variables to Customize**
+- `Customer`: `0` for Cloudera comments, `1` for customer comments.  
+- `EvalLLM`: Path to the evaluation model (e.g., `microsoft/phi-4`).  
 
 
 ---
 
 ### Setup & Installation  
-1. **Dependencies:**  
-   ```bash  
-   pip install transformers vllm  
-   ```  
-2. **GPU Requirements:**  
-   - Step 2 and 3 require a GPU with ~48GB VRAM for 8B model training
+1. **Environment requirements:**
+   - Python 3.9
 
-3. **Cleaning resources**
-   - After finishing step 2, we need to reset the kernel of the notebook to release the GPU.
+3. **Memory and GPU Requirements:**  
+   - Step 2 and 3 require a GPU with ~48GB VRAM for 8B model training
+   - 48GB of cpu memory
+
+4. **Cleaning resources**
+   - After finishing step 3, we need to reset the kernel of the notebook to release the GPU.
+     
 
 ---
 
-### Usage Guide  
-1. **Run all steps in sequence in all notebooks steps 0-3**  
+## Usage Guide  
+1. **Run Step 0 first** to download models.  
+2. **Execute Step 1** to process raw data into training/evaluation sets.  
+3. **Proceed to Step 2** to fine-tune the LLM.  
+4. **Run Step 3** to evaluate performance against the baseline.  
+
+## Expected Outputs  
+- **Step 2**: A fine-tuned model saved to `./tmp/merged_*`.  
+- **Step 3**: Evaluation metrics (win rate, tie percentage) printed in the notebook.  
 
