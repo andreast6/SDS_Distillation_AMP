@@ -3,14 +3,14 @@
 ## Project Overview  
 This project addresses the challenge of improving the accuracy and speed of a customer support LLM while adhering to data privacy constraints. By leveraging synthetic data generation and fine-tuning techniques, we demonstrate how to train a smaller, faster LLM (Meta-Llama-3.1-8B-Instruct) for real-time analysis of customer support requests and compare the results to a base model. The workflow is divided into four core steps:  
 
-1. **Setup & Model Initialization**  
-2. **Data Preparation**  
-3. **Fine-Tuning with LoRA**  
-4. **Inference, Evaluation, and Benchmarking**  
+0. **Setup & Model Initialization**  
+1. **Data Preparation**  
+2. **Fine-Tuning with LoRA**  
+3. **Inference, Evaluation, and Benchmarking**  
 
 ---
 
-### Step 1: Environment Setup & Model Initialization  
+### Step 0: Environment Setup & Model Initialization  
 **Overview**
 - This is the starting notebook of the project. In this step, we download all the required models and install the needed libraries.
 
@@ -27,7 +27,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ---
 
-### Step 2: Data Preparation  
+### Step 1: Data Preparation  
 **Overview**
 - In this notebook, we use the output data from Synthetic Data Studio (SDS) and process it for finetuning and evaluation. Cloudera's customer support team separates and processes  customer and Cloudera comments using two different output formats. Thus, we use different SDS generated data for each comment type. In addition, the SDS outputs is a list of topics and each topic contains the relevant prompt, completion, and evaluation. We use the evaluation score to filter low-quality data  and combine the prompt with the expected completion to teach the LLM using finetuning. For LLM finetuning, we combine the customer and Cloudera comments into one LLM for efficiency. We also leave 1000 samples out for processing Cloudera and customer comments. 
 
@@ -52,7 +52,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ---
 
-### Step 3: Fine-Tuning with LoRA  
+### Step 2: Fine-Tuning with LoRA  
 **Overview**
 - In this notebook, we finetune the LLM using distilled knowledge from SDS. At a highlevel, we add the special tokens before finetuning, split the data into training and dev sets, finetune lora adapters, and merge and store the model.
 **Purpose:**  
@@ -83,7 +83,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ---
 
-### Step 4: Inference, Evaluation, and Benchmarking 
+### Step 3: Inference, Evaluation, and Benchmarking 
 **Overview**
 - In this final notebook, we infer the output (completion) for each Cloudera and customer comments separately. Using the generated answers, we parse the output, extract the releveant information and instruct an LLM-as-a-judge to compare the outputs of the two LLMs (score if A or B model is best or if it is a tie). Here, we evaluate only on answers that there is no tie between the models and compute the winrate and the percentage of ties. Also, this step shows example outputs from each LLM.
 
