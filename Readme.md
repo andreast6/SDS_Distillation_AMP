@@ -148,3 +148,6 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 - Run all steps with unsloth/Meta-Llama-3.1-8B-Instruct for finetuning
 - Evaluate using LLM-as-a-judge microsoft/phi-4
 - The final cell in step 3 tests if the average winrate is 82%
+
+## Known issues
+- Both the AMP deployment and session need to run the same python version
