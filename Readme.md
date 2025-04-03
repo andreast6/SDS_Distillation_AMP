@@ -106,7 +106,12 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Setup & Installation  
 1. **Environment requirements:**
-   - Python 3.9
+   - Python 3.11+
+
+2. **Tested models:**
+   - Tested for Finetuning: unsloth/Meta-Llama-3.1-8B-Instruct and unsloth/gemma-2-2b-it
+   - Tested for LLM-as-a-judge: microsoft/phi-4
+
 
 3. **Memory and GPU Requirements:**  
    - Step 2 and 3 require a GPU with ~48GB VRAM for 8B model training
@@ -124,7 +129,15 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 3. **Proceed to Step 2** to fine-tune the LLM.  
 4. **Run Step 3** to evaluate performance against the baseline.  
 
+---
+
 ## Expected Outputs  
 - **Step 2**: A fine-tuned model saved to `./tmp/merged_*`.  
 - **Step 3**: Evaluation metrics (win rate, tie percentage) printed in the notebook.  
 
+---
+
+## Testing correct execution
+- Run all steps with unsloth/Meta-Llama-3.1-8B-Instruct for finetuning
+- Evaluate using LLM-as-a-judge microsoft/phi-4
+- The final cell in step 3 tests if the average winrate is 82%

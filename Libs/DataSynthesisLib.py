@@ -113,9 +113,13 @@ def GetInferenceClass():
 
       def GenerateChatWithoutSystemWithAssistant(self,System,User):
         self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "user", "content":i},{"role": "assistant", "content":self.Config["AssistantPrompt"]}], tokenize=True)[:-int(self.Config["AssistantPromptElementsRemoval"])or None]) for i in User]
-        
-      #def GenerateVLLMSingleBlocked(self):
-      #    for i in 
+
+      def GenerateChatWithoutSystemWithAssistantStart(self,System,User):
+        self.chat = [self.tokenizer.decode(self.tokenizer.apply_chat_template([{"role": "user", "content":i}], tokenize=True, add_generation_prompt=True)) for i in User]
+
+      def GenerateChatWithSystemWithAssistantStart(self,System,User):
+        self.chat = [self.tokenizer.apply_chat_template([{"role": "system", "content": System},{"role": "user", "content": j}], tokenize=False, add_generation_prompt=True) for j in User]
+
       def GenerateChatSetSystem(self,System,User):
         self.chat = [self.tokenizer.decode(
                          self.tokenizer.apply_chat_template(
@@ -137,6 +141,7 @@ def GetInferenceClass():
         #return self.chat
         if self.Config["UseOutlines"] == "False":
           Out=self.llm.generate(self.chat, self.sampling_params)
+
         else:
           Out=self.generator(self.chat)
         #print(Out)
