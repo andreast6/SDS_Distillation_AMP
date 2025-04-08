@@ -36,7 +36,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Step 1: Data Preparation  
 **Overview**
-- In this notebook, we use the output data from Synthetic Data Studio (SDS) and process it for finetuning and evaluation. Cloudera's customer support team separates and processes  customer and Cloudera comments using two different output formats. Thus, we use different SDS generated data for each comment type. In addition, the SDS outputs is a list of topics and each topic contains the relevant prompt, completion, and evaluation. We use the evaluation score to filter low-quality data  and combine the prompt with the expected completion to teach the LLM using finetuning. For LLM finetuning, we combine the customer and Cloudera comments into one LLM for efficiency. We also leave 1000 samples out for processing Cloudera and customer comments. 
+- In this notebook, we use the output data from Synthetic Data Studio (SDS) and process it for finetuning and evaluation. Cloudera's customer support team separates and processes  customer and Cloudera comments using two different output formats. Thus, we use different SDS generated data for each comment type. In addition, the SDS output is a list of topics and each topic contains the relevant prompt, completion, and evaluation. We use the evaluation score to filter low-quality data  and combine the prompt with the expected completion to teach the LLM using finetuning. For LLM finetuning, we combine the customer and Cloudera comments into one LLM for efficiency. We also leave 1000 samples out for processing Cloudera and customer comments. 
 
 **Purpose:**  
 - Generate structured training data from raw customer support comments  
@@ -61,7 +61,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Step 2: Fine-Tuning with LoRA  
 **Overview**
-- In this notebook, we finetune the LLM using distilled knowledge from SDS. At a highlevel, we add the special tokens before finetuning, split the data into training and dev sets, finetune lora adapters, and merge and store the model.
+- In this notebook, we finetune the LLM using distilled knowledge from SDS. At a high-level, we add the special tokens before fine-tuning, split the data into training and dev sets, finetune lora adapters, and merge and store the model.
 **Purpose:**  
 - Adapts the Meta-Llama-3.1-8B-Instruct model to the customer support domain  
 - Uses LoRA (Low-Rank Adaptation) for efficient parameter updates  
@@ -92,7 +92,7 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ### Step 3: Inference, Evaluation, and Benchmarking 
 **Overview**
-- In this final notebook, we infer the output (completion) for each Cloudera and customer comments separately. Using the generated answers, we parse the output, extract the releveant information and instruct an LLM-as-a-judge to compare the outputs of the two LLMs (score if A or B model is best or if it is a tie). Here, we evaluate only on answers that there is no tie between the models and compute the winrate and the percentage of ties. Also, this step shows example outputs from each LLM.
+- In this final notebook, we infer the output (completion) for each Cloudera and customer comments separately. Using the generated answers, we parse the output, extract the relevant information and instruct an LLM-as-a-judge to compare the outputs of the two LLMs (score if A or B model is best or if it is a tie). Here, we evaluate only on answers that there is no tie between the models and compute the winrate and the percentage of ties. Also, this step shows example outputs from each LLM.
 
 **Purpose:**  
 - Compare the fine-tuned model against the baseline (Meta-Llama-3.1-8B-Instruct)  
@@ -148,6 +148,12 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 - Run all steps with unsloth/Meta-Llama-3.1-8B-Instruct for finetuning
 - Evaluate using LLM-as-a-judge microsoft/phi-4
 - The final cell in step 3 tests if the average winrate is 82%
+
+## Deploying on AI Inference  
+To deploy the fine-tuned model on AI Inference you need to first register the model and, then, deploy the model.
+1. Instructions for registering the model: https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html
+2. Instructions for deploying the model: https://docs.cloudera.com/machine-learning/cloud/registered-models/topics/ml-deploy-model-from-registered-models.html
+
 
 ## Known issues
 - Both the AMP deployment and session need to run the same python version
