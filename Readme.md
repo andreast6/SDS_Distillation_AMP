@@ -151,8 +151,8 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ## Deploying on AI Inference  
 To deploy the fine-tuned model on AI Inference you need to first register the model and, then, deploy the model.
-1. Instructions for registering the model: https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html
-2. Instructions for deploying the model: https://docs.cloudera.com/machine-learning/cloud/registered-models/topics/ml-deploy-model-from-registered-models.html
+1. Instructions for registering the model: link(\https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html)
+2. Instructions for deploying the model: link(\https://docs.cloudera.com/machine-learning/cloud/registered-models/topics/ml-deploy-model-from-registered-models.html)
 
 
 ## Known issues
