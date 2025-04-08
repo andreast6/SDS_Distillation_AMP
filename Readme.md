@@ -138,6 +138,13 @@ This project addresses the challenge of improving the accuracy and speed of a cu
 
 ---
 
+## Advanced Usage Guide  
+The AMP enables three main categories of customizations: custom input data, custom model choice, and custom LLM-as-a-judge evaluation
+1. Custom input data: To modify the input data with your own custom data you need to update the input files used in Step1 (such as ClouderaComments.json). The data need to follow the format exported by [SDS](https://github.com/cloudera/CAI_AMP_Synthetic_Data_Studio). The format also expects data quality evaluation scores to be used for filtering as exported by SDS. Note that if you need to update the prompts, we need to update the CommentText and PreppendClouderaQuestions variables to reflect the new prompts.
+2. Custom model choice: To use your own model for finetuning, you need to download the model in step0 and set the ModelFT variable to the new model (step2 and step3). Note that the second cell and the Config/Config.py provides variables finetuning parameters to choose from, for example, the learning rate etc. Finally, here we can modify the target output path by setting the TargetDir variable.
+3. Custom LLM-as-a-judge evaluation: To select your own LLM-as-a-judge, you need to download the model in step0 and set the variable EvalLLM in step3. In addition, you can load a new evaluation set by replacing the files evaluation files (such as Data/CustomerComments_Evaluation_Clean.json). If you need to ignore the first lines of the finetuned LLM or the base LLM you can use the variables: StartLineFT=1, StartLineBase=1 to ignore 1 line for example. Finally, you can modify the LLM-as-a-judge instructions by changing cells 18 and 19.
+---
+
 ## Expected Outputs  
 - **Step 2**: A fine-tuned model saved to `./tmp/merged_*`.  
 - **Step 3**: Evaluation metrics (win rate, tie percentage) printed in the notebook.  
