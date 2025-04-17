@@ -156,11 +156,6 @@ The AMP enables three main categories of customizations: custom input data, cust
 - Evaluate using LLM-as-a-judge microsoft/phi-4
 - The final cell in step 3 tests if the average winrate is 82%
 
-## Deploying on AI Inference  
-To deploy the fine-tuned model on AI Inference you need to first register the model and, then, deploy the model.
-1. [Instructions for registering the model](https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html)
-2. [Instructions for deploying the model](https://docs.cloudera.com/machine-learning/cloud/registered-models/topics/ml-deploy-model-from-registered-models.html)
-
 
 ## Known issues
 - Both the AMP deployment and session need to run the same python version
